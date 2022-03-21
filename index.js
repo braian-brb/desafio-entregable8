@@ -18,31 +18,7 @@ app.use('/static', express.static(__dirname + '/public'))
 
 
 const products = [
-    {
-        title: 'Pinza Bremen',
-        price: 3200,
-        thumbnail: "url de la foto pinza",
-        id: 1
-
-    },
-    {
-        title: 'Tijeras',
-        price: 80,
-        thumbnail: "url de la foto tijeras",
-        id: 2
-    },
-    {
-        title: 'Coca cola',
-        price: 240,
-        thumbnail: "url de la foto coca",
-        id: 3
-    },
-    {
-        title: 'Escritorio',
-        price: 4500,
-        thumbnail: "url de la foto escritorio",
-        id: 4
-    }
+    
 ]
 //GET '/api/products' -> devuelve todos los products.
 router.get('/products',(req, res) => {
@@ -56,8 +32,16 @@ router.get('/products/:id',(req, res) =>{
 })
 
 //POST '/api/products' -> recibe y agrega un producto, y lo devuelve con su id asignado.
+let flag = false;
 router.post('/products', (req, res) =>{
+
     const newProduct = req.body
+    if(!flag){
+        newProduct.id = 1;
+        flag = true;
+    }
+    else  newProduct.id = (products[products.length - 1].id) + 1 ;
+   
     products.push(newProduct)
     res.send('Post OK')
 })
@@ -68,7 +52,8 @@ router.put('/products/:id', (req, res) => {
     
     if (productFindIndex != undefined) {
         const newProduct = req.body
-        products[productFindIndex] = {newProduct}
+        newProduct.id = (req.params.id);
+        products[productFindIndex] = newProduct
         res.send(newProduct);
     }
     else res.send({error: 'Product not found'});
