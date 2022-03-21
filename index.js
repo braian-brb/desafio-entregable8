@@ -16,55 +16,24 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use('/static', express.static(__dirname + '/public'))
 
+const Container = require('./container.js')
 
-const products = [
-    
-]
+const container = new Container();
+
 //GET '/api/products' -> devuelve todos los products.
-router.get('/products',(req, res) => {
-    res.send(products)
-})
+router.get('/products',(req, res) => { res.send(container.getAll()) })
+
 //GET '/api/products/:id' -> devuelve un producto según su id.
-router.get('/products/:id',(req, res) =>{
-    const productFind = products.find(e => e.id == req.params.id);
-    if (productFind != undefined) res.send(productFind);
-    else res.send({error: 'Product not found'});
-})
+router.get('/products/:id',(req, res) =>{ res.send(container.getById(req.params.id)) })
 
 //POST '/api/products' -> recibe y agrega un producto, y lo devuelve con su id asignado.
-let flag = false;
-router.post('/products', (req, res) =>{
-
-    const newProduct = req.body
-    if(!flag){
-        newProduct.id = 1;
-        flag = true;
-    }
-    else  newProduct.id = (products[products.length - 1].id) + 1 ;
-   
-    products.push(newProduct)
-    res.send('Post OK')
-})
+router.post('/products', (req, res) =>{ res.send(container.save(req.body)) })
 
 //PUT '/api/products/:id' -> recibe y actualiza un producto según su id.
-router.put('/products/:id', (req, res) => {
-    const productFindIndex = products.findIndex(e => e.id == req.params.id);
-    
-    if (productFindIndex != undefined) {
-        const newProduct = req.body
-        newProduct.id = (req.params.id);
-        products[productFindIndex] = newProduct
-        res.send(newProduct);
-    }
-    else res.send({error: 'Product not found'});
-})
+router.put('/products/:id', (req, res) => { res.send(container.updateById(req.params.id, req.body));   })
 
 //DELETE '/api/products/:id' -> elimina un producto según su id.
-router.delete('/products/:id', (req, res) => {
-    const productFindIndex = products.findIndex(e => e.id == req.params.id);
-    products.splice(productFindIndex,1)    
-    res.send('Delete OK')   
-})
+router.delete('/products/:id', (req, res) => {  res.send(container.deleteById(req.params.id))   })
 
 
 
