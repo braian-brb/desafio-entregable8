@@ -1,5 +1,6 @@
 class Products{
     static id = 1;
+    static listProducts = [];
     
     constructor(title, price, thumbnail){
         this.title = title;  
@@ -7,13 +8,13 @@ class Products{
         this.thumbnail = thumbnail;
     }
 
-    arrayProducts = [];
+    
 
    
     saveProduct(newProduct){
         
         newProduct.id = id;
-        arrayProducts.push(newProduct)
+        listProducts.push(newProduct)
         id++;
     }
 

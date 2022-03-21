@@ -21,12 +21,27 @@ const products = [
     {
         title: 'Pinza Bremen',
         price: 3200,
-        thumbnail: "url de la foto pinza"
+        thumbnail: "url de la foto pinza",
+        id: 1
+
     },
     {
         title: 'Tijeras',
         price: 80,
-        thumbnail: "url de la foto tijeras"
+        thumbnail: "url de la foto tijeras",
+        id: 2
+    },
+    {
+        title: 'Coca cola',
+        price: 240,
+        thumbnail: "url de la foto coca",
+        id: 3
+    },
+    {
+        title: 'Escritorio',
+        price: 4500,
+        thumbnail: "url de la foto escritorio",
+        id: 4
     }
 ]
 //GET '/api/products' -> devuelve todos los products.
@@ -53,7 +68,7 @@ router.put('/products/:id', (req, res) => {
     
     if (productFindIndex != undefined) {
         const newProduct = req.body
-        products[productFindIndex] = newProduct
+        products[productFindIndex] = {newProduct}
         res.send(newProduct);
     }
     else res.send({error: 'Product not found'});
