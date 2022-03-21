@@ -21,20 +21,18 @@ const Container = require('./container.js')
 const container = new Container();
 
 //GET '/api/products' -> devuelve todos los products.
-router.get('/products',(req, res) => { res.send(container.getAll()) })
+router.get('/',(req, res) => { res.json(container.getAll()) })
 
 //GET '/api/products/:id' -> devuelve un producto según su id.
-router.get('/products/:id',(req, res) =>{ res.send(container.getById(req.params.id)) })
+router.get('/:id',(req, res) =>{ res.json(container.getById(req.params.id)) })
 
 //POST '/api/products' -> recibe y agrega un producto, y lo devuelve con su id asignado.
-router.post('/products', (req, res) =>{ res.send(container.save(req.body)) })
+router.post('/', (req, res) =>{ res.json(container.save(req.body)) })
 
 //PUT '/api/products/:id' -> recibe y actualiza un producto según su id.
-router.put('/products/:id', (req, res) => { res.send(container.updateById(req.params.id, req.body));   })
+router.put('/:id', (req, res) => { res.json(container.updateById(req.params.id, req.body));   })
 
 //DELETE '/api/products/:id' -> elimina un producto según su id.
-router.delete('/products/:id', (req, res) => {  res.send(container.deleteById(req.params.id))   })
+router.delete('/:id', (req, res) => {  res.json(container.deleteById(req.params.id))   })
 
-
-
-app.use('/api', router);
+app.use('/api/products', router);
