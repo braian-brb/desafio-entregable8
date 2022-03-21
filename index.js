@@ -1,6 +1,12 @@
 
 const express = require('express');
 const app = express();
+const PORT = process.env.PORT || 8080;
+const server = app.listen(PORT, () => {
+    console.log(`Listing in port ${server.address().port}`);
+});
+server.on('error', error => console.log(`Error in server ${error}`));
+
 
 const { Router } = express;
 const router = Router();
@@ -11,7 +17,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use('/static', express.static(__dirname + '/public'))
 
 
-const productos = [
+const products = [
     {
         title: 'Pinza Bremen',
         price: 3200,
@@ -23,38 +29,39 @@ const productos = [
         thumbnail: "url de la foto tijeras"
     }
 ]
-//GET '/api/productos' -> devuelve todos los productos.
-router.get('/productos',(req, res) => {
-    res.send(productos)
+//GET '/api/products' -> devuelve todos los products.
+router.get('/products',(req, res) => {
+    res.send(products)
 })
-//GET '/api/productos/:id' -> devuelve un producto según su id.
-router.get('/productos/:id',(req, res) =>{
-    const productFind = productos.find(e => e.id == req.params.id);
+//GET '/api/products/:id' -> devuelve un producto según su id.
+router.get('/products/:id',(req, res) =>{
+    const productFind = products.find(e => e.id == req.params.id);
     if (productFind != undefined) res.send(productFind);
 })
 
-//POST '/api/productos' -> recibe y agrega un producto, y lo devuelve con su id asignado.
-router.post('/productos', (req, res) =>{
-    const nuevoProducto = req.body
-    productos.push(nuevoProducto)
+//POST '/api/products' -> recibe y agrega un producto, y lo devuelve con su id asignado.
+router.post('/products', (req, res) =>{
+    const newProduct = req.body
+    products.push(newProduct)
     res.send('Post OK')
 })
 
-//PUT '/api/productos/:id' -> recibe y actualiza un producto según su id.
-router.put('/productos/:id', (req, res) => {
-    const productFind = productos.find(e => e.id == req.params.id);
-    if (productFind != undefined) res.send(productFind);
+//PUT '/api/products/:id' -> recibe y actualiza un producto según su id.
+router.put('/products/:id', (req, res) => {
+    const productFindIndex = products.findIndex(e => e.id == req.params.id);
+    
+    if (productFindIndex != undefined) {
+        const newProduct = req.body
+        products[productFindIndex] = newProduct
+        res.send(newProduct);
+    }
 })
 
-//DELETE '/api/productos/:id' -> elimina un producto según su id.
-router.delete('/productos/:id', (req, res) => {
-    const productFindIndex = productos.findIndex(e => e.id == req.params.id);
-    productos.splice(productFindIndex,1)    
+//DELETE '/api/products/:id' -> elimina un producto según su id.
+router.delete('/products/:id', (req, res) => {
+    const productFindIndex = products.findIndex(e => e.id == req.params.id);
+    products.splice(productFindIndex,1)    
     res.send('Delete OK')   
 })
-app.listen(8080);
-
-
-
 
 app.use('/api', router);
