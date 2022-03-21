@@ -29,7 +29,8 @@ router.get('/productos',(req, res) => {
 })
 //GET '/api/productos/:id' -> devuelve un producto según su id.
 router.get('/productos/:id',(req, res) =>{
-    res.send(req.params.id)
+    const productFind = productos.find(e => e.id == req.params.id);
+    if (productFind != undefined) res.send(productFind);
 })
 
 //POST '/api/productos' -> recibe y agrega un producto, y lo devuelve con su id asignado.
@@ -41,22 +42,16 @@ router.post('/productos', (req, res) =>{
 
 //PUT '/api/productos/:id' -> recibe y actualiza un producto según su id.
 router.put('/productos/:id', (req, res) => {
-    const pos = req.params.pos
-    const palabra = req.body.palabra
-     stringFrase = frase.split(' ')
-
-    if (pos > stringFrase.length){
-        res.send({error: 'Parametter is out of range'})
-        return
-    }
-    anterior = stringFrase[pos-1]
-    stringFrase[pos-1] = palabra
-    frase = stringFrase.join(' ')
-    res.send({anterior, actualizada: palabra})
-
+    const productFind = productos.find(e => e.id == req.params.id);
+    if (productFind != undefined) res.send(productFind);
 })
 
 //DELETE '/api/productos/:id' -> elimina un producto según su id.
+router.delete('/productos/:id', (req, res) => {
+    const productFindIndex = productos.findIndex(e => e.id == req.params.id);
+    productos.splice(productFindIndex,1)    
+    res.send('Delete OK')   
+})
 app.listen(8080);
 
 
