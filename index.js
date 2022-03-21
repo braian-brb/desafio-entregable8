@@ -37,6 +37,7 @@ router.get('/products',(req, res) => {
 router.get('/products/:id',(req, res) =>{
     const productFind = products.find(e => e.id == req.params.id);
     if (productFind != undefined) res.send(productFind);
+    else res.send({error: 'Product not found'});
 })
 
 //POST '/api/products' -> recibe y agrega un producto, y lo devuelve con su id asignado.
@@ -55,6 +56,7 @@ router.put('/products/:id', (req, res) => {
         products[productFindIndex] = newProduct
         res.send(newProduct);
     }
+    else res.send({error: 'Product not found'});
 })
 
 //DELETE '/api/products/:id' -> elimina un producto según su id.
@@ -63,5 +65,7 @@ router.delete('/products/:id', (req, res) => {
     products.splice(productFindIndex,1)    
     res.send('Delete OK')   
 })
+
+
 
 app.use('/api', router);
